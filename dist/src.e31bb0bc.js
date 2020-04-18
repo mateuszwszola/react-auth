@@ -32182,41 +32182,7 @@ if ("development" !== "production") {
     style: _propTypes.default.object
   });
 }
-},{"react-router":"../node_modules/react-router/esm/react-router.js","@babel/runtime/helpers/esm/inheritsLoose":"../node_modules/@babel/runtime/helpers/esm/inheritsLoose.js","react":"../node_modules/react/index.js","history":"../node_modules/history/esm/history.js","prop-types":"../node_modules/prop-types/index.js","tiny-warning":"../node_modules/tiny-warning/dist/tiny-warning.esm.js","@babel/runtime/helpers/esm/extends":"../node_modules/@babel/runtime/helpers/esm/extends.js","@babel/runtime/helpers/esm/objectWithoutPropertiesLoose":"../node_modules/@babel/runtime/helpers/esm/objectWithoutPropertiesLoose.js","tiny-invariant":"../node_modules/tiny-invariant/dist/tiny-invariant.esm.js"}],"components/Header.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-var _react = _interopRequireDefault(require("react"));
-
-var _propTypes = _interopRequireDefault(require("prop-types"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var Header = function Header(_ref) {
-  var loggedIn = _ref.loggedIn,
-      login = _ref.login,
-      logout = _ref.logout;
-  return /*#__PURE__*/_react.default.createElement("header", null, loggedIn ? /*#__PURE__*/_react.default.createElement("button", {
-    type: "button",
-    onClick: logout
-  }, "Logout") : /*#__PURE__*/_react.default.createElement("button", {
-    type: "button",
-    onClick: login
-  }, "Login"));
-};
-
-Header.propTypes = {
-  loggedIn: _propTypes.default.bool.isRequired,
-  logout: _propTypes.default.func.isRequired,
-  login: _propTypes.default.func.isRequired
-};
-var _default = Header;
-exports.default = _default;
-},{"react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js"}],"components/Loading.js":[function(require,module,exports) {
+},{"react-router":"../node_modules/react-router/esm/react-router.js","@babel/runtime/helpers/esm/inheritsLoose":"../node_modules/@babel/runtime/helpers/esm/inheritsLoose.js","react":"../node_modules/react/index.js","history":"../node_modules/history/esm/history.js","prop-types":"../node_modules/prop-types/index.js","tiny-warning":"../node_modules/tiny-warning/dist/tiny-warning.esm.js","@babel/runtime/helpers/esm/extends":"../node_modules/@babel/runtime/helpers/esm/extends.js","@babel/runtime/helpers/esm/objectWithoutPropertiesLoose":"../node_modules/@babel/runtime/helpers/esm/objectWithoutPropertiesLoose.js","tiny-invariant":"../node_modules/tiny-invariant/dist/tiny-invariant.esm.js"}],"components/Loading.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -46295,7 +46261,102 @@ function useFirebaseAuth() {
 
 var _default = useFirebaseAuth;
 exports.default = _default;
-},{"react":"../node_modules/react/index.js","./firebase":"firebase.js"}],"components/Dashboard.js":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","./firebase":"firebase.js"}],"context/authContext.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.AuthProvider = AuthProvider;
+exports.useAuth = useAuth;
+
+var _react = _interopRequireWildcard(require("react"));
+
+var _Loading = _interopRequireDefault(require("../components/Loading"));
+
+var _DisplayError = _interopRequireDefault(require("../components/DisplayError"));
+
+var _useFirebaseAuth2 = _interopRequireDefault(require("../useFirebaseAuth"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+
+var AuthContext = (0, _react.createContext)();
+
+function AuthProvider(props) {
+  var _useFirebaseAuth = (0, _useFirebaseAuth2.default)(),
+      user = _useFirebaseAuth.user,
+      login = _useFirebaseAuth.login,
+      logout = _useFirebaseAuth.logout,
+      status = _useFirebaseAuth.status,
+      error = _useFirebaseAuth.error;
+
+  if (status === 'error') {
+    console.error(error);
+    return /*#__PURE__*/_react.default.createElement(_DisplayError.default, {
+      message: error.message
+    });
+  }
+
+  if (status === 'loading') {
+    return /*#__PURE__*/_react.default.createElement(_Loading.default, null);
+  }
+
+  return /*#__PURE__*/_react.default.createElement(AuthContext.Provider, _extends({
+    value: {
+      user: user,
+      login: login,
+      logout: logout
+    }
+  }, props));
+}
+
+function useAuth() {
+  var context = (0, _react.useContext)(AuthContext);
+
+  if (context === undefined) {
+    throw new Error('useAuth must be used withing a AuthProvider');
+  }
+
+  return context;
+}
+},{"react":"../node_modules/react/index.js","../components/Loading":"components/Loading.js","../components/DisplayError":"components/DisplayError.js","../useFirebaseAuth":"useFirebaseAuth.js"}],"components/Header.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireDefault(require("react"));
+
+var _authContext = require("../context/authContext");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var Header = function Header() {
+  var _useAuth = (0, _authContext.useAuth)(),
+      user = _useAuth.user,
+      login = _useAuth.login,
+      logout = _useAuth.logout;
+
+  return /*#__PURE__*/_react.default.createElement("header", null, user ? /*#__PURE__*/_react.default.createElement("button", {
+    type: "button",
+    onClick: logout
+  }, "Logout") : /*#__PURE__*/_react.default.createElement("button", {
+    type: "button",
+    onClick: login
+  }, "Login"));
+};
+
+var _default = Header;
+exports.default = _default;
+},{"react":"../node_modules/react/index.js","../context/authContext":"context/authContext.js"}],"components/Dashboard.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -46392,15 +46453,11 @@ var _reactRouterDom = require("react-router-dom");
 
 var _Header = _interopRequireDefault(require("./components/Header"));
 
-var _Loading = _interopRequireDefault(require("./components/Loading"));
-
-var _DisplayError = _interopRequireDefault(require("./components/DisplayError"));
-
-var _useFirebaseAuth2 = _interopRequireDefault(require("./useFirebaseAuth"));
-
 var _AuthenticatedApp = _interopRequireDefault(require("./AuthenticatedApp"));
 
 var _UnauthenticatedApp = _interopRequireDefault(require("./UnauthenticatedApp"));
+
+var _authContext = require("./context/authContext");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -46409,35 +46466,23 @@ function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
 function App() {
-  var _useFirebaseAuth = (0, _useFirebaseAuth2.default)(),
-      user = _useFirebaseAuth.user,
-      login = _useFirebaseAuth.login,
-      logout = _useFirebaseAuth.logout,
-      status = _useFirebaseAuth.status,
-      error = _useFirebaseAuth.error;
+  var _useAuth = (0, _authContext.useAuth)(),
+      user = _useAuth.user;
 
   var history = (0, _reactRouterDom.useHistory)();
-  var loggedIn = !!user;
-  var loading = status === 'loading';
   (0, _react.useEffect)(function () {
-    if (loggedIn && !history.location.pathname.includes('dashboard')) {
+    if (user && !history.location.pathname.includes('dashboard')) {
       history.push('/dashboard');
-    } else if (!loggedIn && history.location.pathname === '/dashboard') {
+    } else if (!user && history.location.pathname === '/dashboard') {
       history.push('/');
     }
-  }, [loggedIn, history.location.pathname]);
-  return /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement(_Header.default, {
-    loggedIn: loggedIn,
-    login: login,
-    logout: logout
-  }), /*#__PURE__*/_react.default.createElement("h1", null, "React Auth Example"), error ? /*#__PURE__*/_react.default.createElement(_DisplayError.default, {
-    message: error.message
-  }) : /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, loading ? /*#__PURE__*/_react.default.createElement(_Loading.default, null) : /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, loggedIn ? /*#__PURE__*/_react.default.createElement(_AuthenticatedApp.default, null) : /*#__PURE__*/_react.default.createElement(_UnauthenticatedApp.default, null))));
+  }, [user, history.location.pathname]);
+  return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement(_Header.default, null), user ? /*#__PURE__*/_react.default.createElement(_AuthenticatedApp.default, null) : /*#__PURE__*/_react.default.createElement(_UnauthenticatedApp.default, null));
 }
 
 var _default = App;
 exports.default = _default;
-},{"react":"../node_modules/react/index.js","react-router-dom":"../node_modules/react-router-dom/esm/react-router-dom.js","./components/Header":"components/Header.js","./components/Loading":"components/Loading.js","./components/DisplayError":"components/DisplayError.js","./useFirebaseAuth":"useFirebaseAuth.js","./AuthenticatedApp":"AuthenticatedApp.js","./UnauthenticatedApp":"UnauthenticatedApp.js"}],"../node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","react-router-dom":"../node_modules/react-router-dom/esm/react-router-dom.js","./components/Header":"components/Header.js","./AuthenticatedApp":"AuthenticatedApp.js","./UnauthenticatedApp":"UnauthenticatedApp.js","./context/authContext":"context/authContext.js"}],"../node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
 var bundleURL = null;
 
 function getBundleURLCached() {
@@ -46520,12 +46565,14 @@ var _reactRouterDom = require("react-router-dom");
 
 var _App = _interopRequireDefault(require("./App"));
 
+var _authContext = require("./context/authContext");
+
 require("./styles.scss");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-(0, _reactDom.render)( /*#__PURE__*/_react.default.createElement(_reactRouterDom.HashRouter, null, /*#__PURE__*/_react.default.createElement(_App.default, null)), document.getElementById('root'));
-},{"react":"../node_modules/react/index.js","react-dom":"../node_modules/react-dom/index.js","react-router-dom":"../node_modules/react-router-dom/esm/react-router-dom.js","./App":"App.js","./styles.scss":"styles.scss"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+(0, _reactDom.render)( /*#__PURE__*/_react.default.createElement(_reactRouterDom.HashRouter, null, /*#__PURE__*/_react.default.createElement(_authContext.AuthProvider, null, /*#__PURE__*/_react.default.createElement(_App.default, null))), document.getElementById('root'));
+},{"react":"../node_modules/react/index.js","react-dom":"../node_modules/react-dom/index.js","react-router-dom":"../node_modules/react-router-dom/esm/react-router-dom.js","./App":"App.js","./context/authContext":"context/authContext.js","./styles.scss":"styles.scss"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;

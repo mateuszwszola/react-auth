@@ -1,10 +1,12 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import { useAuth } from '../context/authContext';
 
-const Header = ({ loggedIn, login, logout }) => {
+const Header = () => {
+  const { user, login, logout } = useAuth();
+
   return (
     <header>
-      {loggedIn ? (
+      {user ? (
         <button type="button" onClick={logout}>
           Logout
         </button>
@@ -15,12 +17,6 @@ const Header = ({ loggedIn, login, logout }) => {
       )}
     </header>
   );
-};
-
-Header.propTypes = {
-  loggedIn: PropTypes.bool.isRequired,
-  logout: PropTypes.func.isRequired,
-  login: PropTypes.func.isRequired,
 };
 
 export default Header;
