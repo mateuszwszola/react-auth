@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const Header = ({ loggedIn, logout, login }) => {
+const Header = ({ loggedIn, login, logout }) => {
   return (
     <header>
       {loggedIn ? (
