@@ -1,13 +1,17 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React from 'react';
+import PropTypes from 'prop-types';
 
 const Header = ({ loggedIn, logout, login }) => {
   return (
     <header>
       {loggedIn ? (
-        <button onClick={logout}>Logout</button>
+        <button type="button" onClick={logout}>
+          Logout
+        </button>
       ) : (
-        <button onClick={login}>Login</button>
+        <button type="button" onClick={login}>
+          Login
+        </button>
       )}
     </header>
   );
