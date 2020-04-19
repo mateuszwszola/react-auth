@@ -1,8 +1,8 @@
 import React from 'react';
-import { useAuth } from '../context/authContext';
+import { useUser } from '../context/userContext';
 
 const Dashboard = () => {
-  const { user } = useAuth();
+  const user = useUser();
   const displayName = (user && user.displayName) || 'User';
   const photoURL = user && user.photoURL;
 
