@@ -1,17 +1,18 @@
 import React from 'react';
-import { Switch, Route, Redirect } from 'react-router-dom';
+import { Switch, Route } from 'react-router-dom';
 import Dashboard from './components/Dashboard';
+import NotFound from './components/404';
 
 function AuthenticatedApp() {
   return (
     <>
       <Switch>
-        <Route path="/dashboard" exact>
+        <Route path="/" exact>
           <Dashboard />
         </Route>
 
         <Route>
-          <Redirect to="/" />
+          <NotFound />
         </Route>
       </Switch>
     </>

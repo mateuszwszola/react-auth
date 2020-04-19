@@ -1,1 +1,1 @@
-# React authentication with Firebase Template
+# React Authentication with Firebase

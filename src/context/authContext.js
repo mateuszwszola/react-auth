@@ -1,17 +1,11 @@
 import React, { createContext, useContext } from 'react';
 import Loading from '../components/Loading';
-import DisplayError from '../components/DisplayError';
-import useFirebaseAuth from '../useFirebaseAuth';
+import useFirebaseAuth from '../hooks/useFirebaseAuth';
 
 const AuthContext = createContext();
 
 function AuthProvider(props) {
-  const { user, login, logout, status, error } = useFirebaseAuth();
-
-  if (status === 'error') {
-    console.error(error);
-    return <DisplayError message={error.message} />;
-  }
+  const { user, login, logout, status } = useFirebaseAuth();
 
   if (status === 'loading') {
     return <Loading />;

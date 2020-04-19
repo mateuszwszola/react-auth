@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect } from 'react';
-import firebase from './firebase';
+import firebase from '../firebase';
 
 function useFirebaseAuth() {
   const [user, setUser] = useState(null);
@@ -30,11 +30,8 @@ function useFirebaseAuth() {
         setError(null);
       })
       .catch((err) => {
+        setError(err);
         setStatus('error');
-        setError({
-          code: err.code,
-          message: err.message,
-        });
       });
   });
 

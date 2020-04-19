@@ -1,26 +1,20 @@
-import React, { useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import React from 'react';
 import Header from './components/Header';
-import AuthenticatedApp from './AuthenticatedApp';
-import UnauthenticatedApp from './UnauthenticatedApp';
-import { useAuth } from './context/authContext';
+import Loading from './components/Loading';
+import { useUser } from './context/userContext';
+
+const AuthenticatedApp = React.lazy(() => import('./AuthenticatedApp'));
+const UnauthenticatedApp = React.lazy(() => import('./UnauthenticatedApp'));
 
 function App() {
-  const { user } = useAuth();
-  const history = useHistory();
-
-  useEffect(() => {
-    if (user && !history.location.pathname.includes('dashboard')) {
-      history.push('/dashboard');
-    } else if (!user && history.location.pathname === '/dashboard') {
-      history.push('/');
-    }
-  }, [user, history.location.pathname]);
+  const user = useUser();
 
   return (
     <>
       <Header />
-      {user ? <AuthenticatedApp /> : <UnauthenticatedApp />}
+      <React.Suspense fallback={<Loading />}>
+        {user ? <AuthenticatedApp /> : <UnauthenticatedApp />}
+      </React.Suspense>
     </>
   );
 }
